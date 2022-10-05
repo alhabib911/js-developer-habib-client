@@ -3,26 +3,33 @@ import { FiEye } from 'react-icons/fi';
 import { BiEditAlt } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { Box, Button, Dialog, Modal, TextField, Typography } from '@mui/material';
+import { Dialog, FormControl, InputLabel, MenuItem, Modal, Select, TextField } from '@mui/material';
 
 const ManageStudent = () => {
     const [student, setStudent] = useState([]);
     const [open, setOpen] = React.useState(false);
+    const [editModal, setEditModal] = React.useState(false);
     const [studentDetails, setStudentDetails] = useState({})
+    const [className, setClassName] = React.useState('');
+    const [division, setDivision] = React.useState('');
 
+const {_id} = studentDetails
     const handleClickView = (students) => {
         setOpen(true);
-        console.log(students);
+        // console.log(students);
         setStudentDetails(students)
     };
     const handleClickEdit = (students) => {
-        setOpen(true);
-        console.log(students);
+        setEditModal(true);
+        // console.log(students);
         setStudentDetails(students)
     };
 
     const handleClose = () => {
         setOpen(false);
+    };
+    const handleEditClose = () => {
+        setEditModal(false);
     };
 
     useEffect(() => {
@@ -31,7 +38,58 @@ const ManageStudent = () => {
             .then((data) => setStudent(data));
     }, [student]);
     // console.log(student);
+    
 
+    const handleClass = (event) => {
+        setClassName(event.target.value);
+    };
+    const handleDivision = (event) => {
+        setDivision(event.target.value);
+    };
+
+    const handleEditStudent = (e) => {
+        e.preventDefault();
+        const firstName = e.target.firstName.value;
+        const middleName = e.target.middleName.value;
+        const lastName = e.target.lastName.value;
+        const rollNumber = e.target.rollNumber.value;
+        const addressLine1 = e.target.addressLine1.value;
+        const addressLine2 = e.target.addressLine2.value;
+        const landMark = e.target.landMark.value;
+        const city = e.target.city.value;
+        const pinCode = e.target.pinCode.value;
+
+
+
+        const UpdateStudent = {
+            firstName,
+            middleName,
+            lastName,
+            className,
+            division,
+            rollNumber,
+            addressLine1,
+            addressLine2,
+            landMark,
+            city,
+            pinCode,
+        };
+        console.log(UpdateStudent);
+
+        const url = `http://localhost:5000/updateStudent/${_id}`;
+        fetch(url, {
+            method: "PUT",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify(UpdateStudent),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("success", data);
+                e.target.reset();
+            });
+    };
 
     return (
         <div className='mr-10'>
@@ -73,22 +131,17 @@ const ManageStudent = () => {
                                 <td className="py-2 whitespace-nowrap text-right">
                                     {students.rollNumber}
                                 </td>
-                                <td className="py-2 whitespace-nowrap text-right">
-                                    <Button onClick={() => handleClickView(students)}>
+                                <td className="py-2 whitespace-nowrap flex justify-end pr-10 gap-10">
+                                    <button onClick={() => handleClickView(students)}>
                                         <div className='text-red-500'>
                                             <FiEye />
                                         </div>
-                                    </Button>
-                                    <Button onClick={() => handleClickEdit(students)}>
+                                    </button>
+                                    <button onClick={() => handleClickEdit(students)}>
                                         <div className='text-red-500'>
                                             <BiEditAlt />
                                         </div>
-                                    </Button>
-                                    {/* <Button onClick={() => handleClickOpen(students)}>
-                                        <div className='text-red-500'>
-                                            <RiDeleteBin6Line />
-                                        </div>
-                                    </Button> */}
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -140,24 +193,24 @@ const ManageStudent = () => {
                             <TextField
                                 sx={{ width: '25ch' }}
                                 id="outlined-basic"
-                                label="Last Name"
+                                label="Class Name"
                                 variant="outlined"
                                 value={studentDetails?.className}
-                                type="text" name="lastName" />
+                                type="text" name="className" />
                             <TextField
                                 sx={{ width: '25ch' }}
                                 id="outlined-basic"
-                                label="Last Name"
+                                label="Division"
                                 variant="outlined"
                                 value={studentDetails?.division}
-                                type="text" name="lastName" />
+                                type="text" name="division" />
                             <TextField
                                 sx={{ width: '25ch' }}
                                 id="outlined-basic"
-                                label="Last Name"
+                                label="Roll Number"
                                 variant="outlined"
                                 value={studentDetails?.rollNumber}
-                                type="text" name="lastName" />
+                                type="text" name="rollNumber" />
                         </div>
 
                         <div className='mt-12 flex justify-between gap-2'>
@@ -206,6 +259,148 @@ const ManageStudent = () => {
                                 value={studentDetails?.pinCode}
                                 type="text" name="pinCode" />
                         </div>
+                    </div>
+                </div>
+            </Dialog>
+            <Dialog
+                open={editModal}
+                onClose={handleEditClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <div className='mx-10 my-10'>
+                    <div className='flex justify-between'>
+                        <h2 className='font-semibold'>Student Information</h2>
+                        <button className='text-[#F33823]' onClick={handleEditClose}>
+                            X
+                        </button>
+                    </div>
+
+                    <div className='mt-5'>
+                        <form onSubmit={handleEditStudent}>
+                            <div className='flex justify-between gap-2'>
+                                <TextField
+                                    sx={{ width: '25ch' }}
+                                    id="outlined-basic"
+                                    label="First Name"
+                                    variant="outlined"
+                                    defaultValue={studentDetails?.firstName}
+                                    type="text" name="firstName" />
+
+                                <TextField
+                                    sx={{ width: '25ch' }}
+                                    id="outlined-basic"
+                                    label="Middle Name"
+                                    variant="outlined"
+                                    defaultValue={studentDetails?.middleName}
+                                    type="text" name="middleName" />
+
+                                <TextField
+                                    sx={{ width: '25ch' }}
+                                    id="outlined-basic"
+                                    label="Last Name"
+                                    variant="outlined"
+                                    defaultValue={studentDetails?.lastName}
+                                    type="text" name="lastName" />
+                            </div>
+
+                            <div className='flex justify-between mt-4 gap-2'>
+                            <FormControl sx={{ width: '37ch' }}>
+                            <InputLabel id="demo-simple-select-label">Select Class</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Class"
+                                onChange={handleClass}
+                                defaultValue={studentDetails?.className}
+                            >
+                                <MenuItem value={1}>1</MenuItem>
+                                <MenuItem value={2}>2</MenuItem>
+                                <MenuItem value={3}>3</MenuItem>
+                                <MenuItem value={4}>4</MenuItem>
+                                <MenuItem value={5}>5</MenuItem>
+                                <MenuItem value={6}>6</MenuItem>
+                                <MenuItem value={7}>7</MenuItem>
+                                <MenuItem value={8}>8</MenuItem>
+                                <MenuItem value={9}>9</MenuItem>
+                                <MenuItem value={10}>10</MenuItem>
+                                <MenuItem value={11}>11</MenuItem>
+                                <MenuItem value={12}>12</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{ width: '37ch' }}>
+                            <InputLabel id="demo-simple-select-label">Select Division</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="division"
+                                onChange={handleDivision}
+                                defaultValue={studentDetails?.division}
+                            >
+                                <MenuItem value={'A'}>A</MenuItem>
+                                <MenuItem value={'B'}>B</MenuItem>
+                                <MenuItem value={'C'}>C</MenuItem>
+                                <MenuItem value={'D'}>D</MenuItem>
+                                <MenuItem value={'E'}>E</MenuItem>
+                            </Select>
+                        </FormControl>
+                                <TextField
+                                    sx={{ width: '25ch' }}
+                                    id="outlined-basic"
+                                    label="Roll Number"
+                                    variant="outlined"
+                                    defaultValue={studentDetails?.rollNumber}
+                                    type="text" name="rollNumber" />
+                            </div>
+
+                            <div className='mt-12 flex justify-between gap-2'>
+                                <TextField
+                                    sx={{ width: '56ch' }}
+                                    id="outlined-multiline-static"
+                                    label="Address Line 1"
+                                    multiline
+                                    rows={1}
+                                    defaultValue={studentDetails?.addressLine1}
+                                    type="textArea" name="addressLine1"
+                                />
+                                <TextField
+                                    sx={{ width: '57ch' }}
+                                    id="outlined-multiline-static"
+                                    label="Address Line 2"
+                                    multiline
+                                    rows={1}
+                                    defaultValue={studentDetails?.addressLine2}
+                                    type="textArea" name="addressLine2"
+                                />
+                            </div>
+
+                            <div className='mt-5 flex justify-between gap-2'>
+                                <TextField
+                                    sx={{ width: '25ch' }}
+                                    id="outlined-basic"
+                                    label="LandMark"
+                                    variant="outlined"
+                                    defaultValue={studentDetails?.landMark}
+                                    type="text" name="landMark" />
+
+                                <TextField
+                                    sx={{ width: '25ch' }}
+                                    id="outlined-basic"
+                                    label="City"
+                                    variant="outlined"
+                                    defaultValue={studentDetails?.city}
+                                    type="text" name="city" />
+
+                                <TextField
+                                    sx={{ width: '25ch' }}
+                                    id="outlined-basic"
+                                    label="Pincode"
+                                    variant="outlined"
+                                    defaultValue={studentDetails?.pinCode}
+                                    type="text" name="pinCode" />
+                            </div>
+                            <input type="submit" value="Save" />
+                        </form>
                     </div>
                 </div>
             </Dialog>
