@@ -7,13 +7,13 @@ import ManageStudent from './Components/ManageStudent/ManageStudent';
 function App() {
   return (
     <div>
-      <Routes>
-        <Route path='/' element={<Dashboard />}>
+        <Routes>
+          <Route path='/' element={<Dashboard/>}>
           <Route index element={<AddStudent />}></Route>
-          <Route path='/home' element={<AddStudent />}></Route>
-          <Route path='/manage-student' element={<ManageStudent />}></Route>
-        </Route>
-      </Routes>
+          <Route path='/home' element={<AddStudent/>}></Route>
+          <Route path='/manage-student' element={<ManageStudent/>}></Route>
+          </Route>
+        </Routes>
     </div>
   );
 }

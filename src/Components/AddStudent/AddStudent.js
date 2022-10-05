@@ -1,5 +1,7 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import {FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import React from 'react';
+import Swal from 'sweetalert2';
+
 
 const AddStudent = () => {
     const [className, setClassName] = React.useState('');
@@ -39,20 +41,25 @@ const AddStudent = () => {
         };
         console.log(AddStudent);
 
-        // fetch("http://localhost:5000/addStudent", {
-        //     method: "POST",
-        //     headers: {
-        //         "content-type": "application/json",
-        //     },
-        //     body: JSON.stringify(AddStudent),
-        // })
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         console.log(data);
-        //         if (data) {
-        //             e.target.reset();
-        //         }
-        //     });
+        fetch("http://localhost:5000/addStudent", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify(AddStudent),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                if (data) {
+                    Swal.fire(
+                        'Good job!',
+                        'Added Successfully!',
+                        'success'
+                      )
+                    e.target.reset();
+                }
+            });
     };
 
     return (
@@ -134,8 +141,10 @@ const AddStudent = () => {
                             min="1" max="99"
                         />
 
+                       
                     </div>
                     <div className='mt-12 flex justify-between'>
+                    {/* <input type="number" name="rollNumber" id="" min="1" max="99"/> */}
                         <TextField
                             sx={{ width: '56ch' }}
                             id="outlined-multiline-static"
@@ -181,6 +190,7 @@ const AddStudent = () => {
 
                 </form>
             </div>
+
         </div>
     );
 };
