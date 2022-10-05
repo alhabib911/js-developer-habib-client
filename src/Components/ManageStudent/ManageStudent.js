@@ -2,18 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { FiEye } from 'react-icons/fi';
 import { BiEditAlt } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { AiFillCloseCircle } from 'react-icons/ai';
-import { Dialog, FormControl, InputLabel, MenuItem, Modal, Select, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import Swal from 'sweetalert2';
 
 const ManageStudent = () => {
     const [student, setStudent] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [editModal, setEditModal] = React.useState(false);
+    const [deleteModal, setDeleteModal] = React.useState(false);
     const [studentDetails, setStudentDetails] = useState({})
     const [className, setClassName] = React.useState('');
     const [division, setDivision] = React.useState('');
 
-const {_id} = studentDetails
+    const { _id } = studentDetails
     const handleClickView = (students) => {
         setOpen(true);
         // console.log(students);
@@ -24,12 +25,20 @@ const {_id} = studentDetails
         // console.log(students);
         setStudentDetails(students)
     };
+    const handleClickEDelete = (students) => {
+        setDeleteModal(true);
+        // console.log(students);
+        setStudentDetails(students)
+    };
 
     const handleClose = () => {
         setOpen(false);
     };
     const handleEditClose = () => {
         setEditModal(false);
+    };
+    const handleDeleteClose = () => {
+        setDeleteModal(false);
     };
 
     useEffect(() => {
@@ -38,7 +47,7 @@ const {_id} = studentDetails
             .then((data) => setStudent(data));
     }, [student]);
     // console.log(student);
-    
+
 
     const handleClass = (event) => {
         setClassName(event.target.value);
@@ -47,6 +56,7 @@ const {_id} = studentDetails
         setDivision(event.target.value);
     };
 
+    // Update Student
     const handleEditStudent = (e) => {
         e.preventDefault();
         const firstName = e.target.firstName.value;
@@ -74,7 +84,7 @@ const {_id} = studentDetails
             city,
             pinCode,
         };
-        console.log(UpdateStudent);
+        // console.log(UpdateStudent);
 
         const url = `http://localhost:5000/updateStudent/${_id}`;
         fetch(url, {
@@ -87,10 +97,33 @@ const {_id} = studentDetails
             .then((res) => res.json())
             .then((data) => {
                 console.log("success", data);
+                Swal.fire(
+                    'Good job!',
+                    'Update Successfully!',
+                    'success'
+                )
                 e.target.reset();
             });
     };
 
+    // Delete Student
+    const handleEDeleteStudent = (id) => {
+        setDeleteModal(false);
+        const url = `http://localhost:5000/deleteStudent/${id}`;
+        fetch(url, {
+            method: "DELETE",
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("success", data);
+                Swal.fire(
+                    'Good job!',
+                    'Delete Successfully!',
+                    'success'
+                )
+            });
+        // }
+    };
     return (
         <div className='mr-10'>
             <div className='flex justify-between'>
@@ -142,12 +175,18 @@ const {_id} = studentDetails
                                             <BiEditAlt />
                                         </div>
                                     </button>
+                                    <button onClick={() => handleClickEDelete(students)}>
+                                        <div className='text-red-500'>
+                                            <RiDeleteBin6Line />
+                                        </div>
+                                    </button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            {/* Student Information View */}
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -262,6 +301,8 @@ const {_id} = studentDetails
                     </div>
                 </div>
             </Dialog>
+
+            {/* Student Information Edit */}
             <Dialog
                 open={editModal}
                 onClose={handleEditClose}
@@ -305,45 +346,45 @@ const {_id} = studentDetails
                             </div>
 
                             <div className='flex justify-between mt-4 gap-2'>
-                            <FormControl sx={{ width: '37ch' }}>
-                            <InputLabel id="demo-simple-select-label">Select Class</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                label="Class"
-                                onChange={handleClass}
-                                defaultValue={studentDetails?.className}
-                            >
-                                <MenuItem value={1}>1</MenuItem>
-                                <MenuItem value={2}>2</MenuItem>
-                                <MenuItem value={3}>3</MenuItem>
-                                <MenuItem value={4}>4</MenuItem>
-                                <MenuItem value={5}>5</MenuItem>
-                                <MenuItem value={6}>6</MenuItem>
-                                <MenuItem value={7}>7</MenuItem>
-                                <MenuItem value={8}>8</MenuItem>
-                                <MenuItem value={9}>9</MenuItem>
-                                <MenuItem value={10}>10</MenuItem>
-                                <MenuItem value={11}>11</MenuItem>
-                                <MenuItem value={12}>12</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <FormControl sx={{ width: '37ch' }}>
-                            <InputLabel id="demo-simple-select-label">Select Division</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                label="division"
-                                onChange={handleDivision}
-                                defaultValue={studentDetails?.division}
-                            >
-                                <MenuItem value={'A'}>A</MenuItem>
-                                <MenuItem value={'B'}>B</MenuItem>
-                                <MenuItem value={'C'}>C</MenuItem>
-                                <MenuItem value={'D'}>D</MenuItem>
-                                <MenuItem value={'E'}>E</MenuItem>
-                            </Select>
-                        </FormControl>
+                                <FormControl sx={{ width: '37ch' }}>
+                                    <InputLabel id="demo-simple-select-label">Select Class</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="Class"
+                                        onChange={handleClass}
+                                        defaultValue={studentDetails?.className}
+                                    >
+                                        <MenuItem value={1}>1</MenuItem>
+                                        <MenuItem value={2}>2</MenuItem>
+                                        <MenuItem value={3}>3</MenuItem>
+                                        <MenuItem value={4}>4</MenuItem>
+                                        <MenuItem value={5}>5</MenuItem>
+                                        <MenuItem value={6}>6</MenuItem>
+                                        <MenuItem value={7}>7</MenuItem>
+                                        <MenuItem value={8}>8</MenuItem>
+                                        <MenuItem value={9}>9</MenuItem>
+                                        <MenuItem value={10}>10</MenuItem>
+                                        <MenuItem value={11}>11</MenuItem>
+                                        <MenuItem value={12}>12</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <FormControl sx={{ width: '37ch' }}>
+                                    <InputLabel id="demo-simple-select-label">Select Division</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="division"
+                                        onChange={handleDivision}
+                                        defaultValue={studentDetails?.division}
+                                    >
+                                        <MenuItem value={'A'}>A</MenuItem>
+                                        <MenuItem value={'B'}>B</MenuItem>
+                                        <MenuItem value={'C'}>C</MenuItem>
+                                        <MenuItem value={'D'}>D</MenuItem>
+                                        <MenuItem value={'E'}>E</MenuItem>
+                                    </Select>
+                                </FormControl>
                                 <TextField
                                     sx={{ width: '25ch' }}
                                     id="outlined-basic"
@@ -399,10 +440,37 @@ const {_id} = studentDetails
                                     defaultValue={studentDetails?.pinCode}
                                     type="text" name="pinCode" />
                             </div>
-                            <input type="submit" value="Save" />
+                            <div className='mt-8'>
+                                <input className='bg-red-500 px-20 py-3 rounded cursor-pointer text-white font-bold' type="submit" value="Save" />
+                            </div>
                         </form>
                     </div>
                 </div>
+            </Dialog>
+
+            {/* Student Information Delete */}
+            <Dialog
+                open={deleteModal}
+                onClose={handleDeleteClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Are you sure you want to delete this item?"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDeleteClose}>Cancel</Button>
+                    <Button onClick={() => handleEDeleteStudent(studentDetails?._id)} autoFocus>
+                        <div className='text-red-500'>
+                            Delete
+                        </div>
+                    </Button>
+                </DialogActions>
             </Dialog>
         </div>
     );
