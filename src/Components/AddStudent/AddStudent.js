@@ -149,19 +149,19 @@ const AddStudent = () => {
                         <input
                             required
                             className='border w-1/3 py-4 pl-5 rounded-md outline-none'
-                            placeholder='landMark'
+                            placeholder='Landmark'
                             type="text" name="landMark" />
 
                         <input
                             required
                             className='border w-1/3 py-4 pl-5 rounded-md outline-none'
-                            placeholder='city'
+                            placeholder='City'
                             type="text" name="city" />
 
                         <input
                             required
                             className='border w-1/3 py-4 pl-5 rounded-md outline-none'
-                            placeholder='pinCode'
+                            placeholder='Pincode'
                             type="number" name="pinCode" 
                             min="1" max="999999"/>
                     </div>
