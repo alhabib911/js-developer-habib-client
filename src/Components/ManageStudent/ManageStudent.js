@@ -44,11 +44,11 @@ const ManageStudent = () => {
     };
 
     useEffect(() => {
-        fetch('https://js-developer-habib-server.onrender.com/addStudent')
+        fetch('https://js-developer-server.onrender.com/addStudent')
             .then((res) => res.json())
             .then((data) => setStudent(data));
     }, [student]);
-    // console.log(student);
+    console.log(student);
 
     // Update Student
     const handleEditStudent = (e) => {
@@ -82,7 +82,7 @@ const ManageStudent = () => {
         };
         console.log(UpdateStudent);
 
-        const url = `https://js-developer-habib-server.onrender.com/updateStudent/${_id}`;
+        const url = `https://js-developer-server.onrender.com/updateStudent/${_id}`;
         fetch(url, {
             method: "PUT",
             headers: {
@@ -105,7 +105,7 @@ const ManageStudent = () => {
     // Delete Student
     const handleEDeleteStudent = (id) => {
         setDeleteModal(false);
-        const url = `https://js-developer-habib-server.onrender.com/deleteStudent/${id}`;
+        const url = `https://js-developer-server.onrender.com/deleteStudent/${id}`;
         fetch(url, {
             method: "DELETE",
         })
