@@ -42,17 +42,15 @@ const Dashboard = () => {
                                 )}
                             </NavLink>
                             <NavLink to="logout">
-                                {({ isActive }) => (
-                                    <span
+                            <span
                                         className={
-                                            isActive
-                                                ? "flex bg-red-500  my-4 px-6 p-2 duration-300 transition cursor-pointer rounded text-white"
-                                                : "hover:bg-custom-gray flex  my-4 px-6 p-2"
+                                            
+                                                 "flex my-4 px-6 p-2 duration-300 transition cursor-pointer rounded"
+                                                
                                         }
                                     >
                                         <span className='flex items-center gap-2'><FiLogOut/>Logout</span>
                                     </span>
-                                )}
                             </NavLink>
                         </div>
                     </div>
