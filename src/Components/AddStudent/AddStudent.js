@@ -34,7 +34,7 @@ const AddStudent = () => {
         };
         console.log(AddStudent);
 
-        fetch("http://localhost:5000/addStudent", {
+        fetch("https://js-developer-habib-server.onrender.com/addStudent", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
