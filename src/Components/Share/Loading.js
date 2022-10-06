@@ -3,7 +3,7 @@ import { TbLoader } from 'react-icons/tb';
 
 const Loading = () => {
     return (
-        <div>
+        <div className='text-center text-5xl'>
             <TbLoader/>
         </div>
     );
