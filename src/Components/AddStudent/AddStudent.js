@@ -1,5 +1,6 @@
 import React from 'react';
 import Swal from 'sweetalert2';
+import TimeZone from '../Share/TimeZone';
 
 
 const AddStudent = () => {
@@ -58,7 +59,7 @@ const AddStudent = () => {
         <div className='mr-10'>
             <div className='flex justify-between'>
                 <h2 className='font-semibold'>Add Student</h2>
-                <h2>25 Jul 2022 16:10</h2>
+                <h2><TimeZone/></h2>
             </div>
             <div className='mt-5'>
                 <form onSubmit={handleAddStudent}>

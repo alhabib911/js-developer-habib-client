@@ -4,6 +4,7 @@ import { BiEditAlt } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
+import TimeZone from '../Share/TimeZone';
 
 const ManageStudent = () => {
     const [student, setStudent] = useState([]);
@@ -123,7 +124,7 @@ const ManageStudent = () => {
         <div className='mr-10'>
             <div className='flex justify-between'>
                 <h2 className='font-semibold'>Manage Students</h2>
-                <h2>25 Jul 2022 16:10</h2>
+                <h2><TimeZone/></h2>
             </div>
             <div className='mt-10'>
 
